@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: www
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: at-gateway-app
+    platform: linux/amd64
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - at-gateway-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: at-gateway-nginx
+    env_file: ./.env
+    ports:
+      - "${AT_GATEWAY_LOCAL_PORT}:${AT_GATEWAY_DOCKER_PORT}"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - at-gateway-network
+
+networks:
+  at-gateway-network:
+    driver: bridge

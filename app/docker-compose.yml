@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: www
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: at-app
+    platform: linux/amd64
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - at-app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: at-app-nginx
+    env_file: ./.env
+    ports:
+      - "${AT_APP_LOCAL_PORT}:${AT_APP_DOCKER_PORT}"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - at-app-network
+
+  mongodb:
+    image: mongo:5.0.2
+    container_name: at-app-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=at-app-db
+    ports:
+      - "${AT_APP_LOCAL_DB_PORT}:${AT_APP_DOCKER_DB_PORT}"
+    volumes:
+      - ./docker/mongodb/runtime/data:/data/db
+    networks:
+      - at-app-network
+
+volumes:
+  db:
+
+networks:
+  at-app-network:
+    driver: bridge

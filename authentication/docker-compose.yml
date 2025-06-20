@@ -1,0 +1,51 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: www
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: at-authentication-app
+    platform: linux/amd64
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - at-authentication-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: at-authentication-nginx
+    env_file: ./.env
+    ports:
+      - "${AT_AUTHENTICATION_LOCAL_PORT}:${AT_AUTHENTICATION_DOCKER_PORT}"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - at-authentication-network
+
+  db:
+    image: percona/percona-server:8.4.3-3
+    container_name: at-authentication-db
+    env_file: ./.env
+    ports:
+      - "${AT_AUTHENTICATION_LOCAL_DB_PORT}:${AT_AUTHENTICATION_DOCKER_DB_PORT}"
+    environment:
+      MYSQL_DATABASE: at-authentication
+      MYSQL_ROOT_PASSWORD: at-authentication
+      MYSQL_PASSWORD: at-authentication
+      MYSQL_USER: at-authentication
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mysql/runtime/data:/var/lib/mysql
+    networks:
+      - at-authentication-network
+networks:
+  at-authentication-network:
+    driver: bridge
