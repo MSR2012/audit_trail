@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,10 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+use Laravel\Lumen\Routing\Router;
+
+$router->group(['prefix' => 'authentication'], function () use ($router) {
+    return $router->post('/login', function () use ($router) {
+        return response()->json(['message' => 'Login success'], 200);
+    });
 });

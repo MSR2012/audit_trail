@@ -1,6 +1,9 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/**
+ * @var Router $router
+ * @var Request $request
+ */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,24 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+use App\Helper\ForwardRequestHelper;
+use Illuminate\Http\Request;
+use Laravel\Lumen\Routing\Router;
+
+$router->group(['prefix' => 'auth'], function () use ($router) {
+    $router->post('/login', function (Request $request) use ($router) {
+        return ForwardRequestHelper::handle(
+            $request->method(),
+            env('AT_AUTHENTICATION_BASE_URL') . '/authentication/login'
+        );
+    });
+});
+
+$router->group(['prefix' => 'app'], function () use ($router) {
+    $router->get('/ips', function (Request $request) use ($router) {
+        return ForwardRequestHelper::handle(
+            $request->method(),
+            env('AT_APP_BASE_URL') . '/app/ips'
+        );
+    });
 });
