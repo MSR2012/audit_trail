@@ -19,7 +19,7 @@ class CheckAllowedDomains
         ];
 
         $origin = $request->headers->get('Origin');
-        if ($origin && !in_array($origin, $allowedDomains)) {
+        if (!$origin || !in_array($origin, $allowedDomains)) {
             return response('Forbidden', 403);
         }
 

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class JwtMiddleware
+class JwtRefreshMiddleware
 {
 
     public function __construct(
@@ -24,18 +24,17 @@ class JwtMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $token = $request->header('Authorization');
+        $token = $request->header('Refresh-Token');
         if (!$token) {
             return response()->json([
-                'error_message' => 'Access token is missing.',
+                'error_message' => 'Refresh token is missing.',
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
-        $token = str_replace('Bearer ', '', $token);
-        $sessionPayload = $this->jwtService->decode($token);
-        if (!$sessionPayload || $sessionPayload['exp'] < Carbon::now()) {
+        $refreshTokenPayload = $this->jwtService->decode($token);
+        if (!$refreshTokenPayload || $refreshTokenPayload['exp'] < Carbon::now()) {
             return response()->json([
-                'error_message' => 'Invalid access token.',
+                'error_message' => 'Invalid refresh token.',
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 

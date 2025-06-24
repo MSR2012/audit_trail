@@ -7,6 +7,7 @@ use App\Actions\Sessions\DeleteSession;
 use App\Actions\Sessions\UpdateSession;
 use App\Dtos\CreateSessionDto;
 use App\Dtos\UpdateSessionDto;
+use App\Jobs\BlacklistToken;
 use App\Models\User;
 use App\Repositories\SessionRepository;
 use App\Repositories\UserRepository;
@@ -30,9 +31,6 @@ class AuthController extends Controller
     {
     }
 
-    /**
-     * @throws ValidationException
-     */
     public function login(
         Request       $request,
         JwtService    $jwtService,
@@ -40,54 +38,62 @@ class AuthController extends Controller
         DeleteSession $deleteSession
     ): JsonResponse
     {
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required|string'
-        ]);
+        try {
+            $this->validate($request, [
+                'email' => 'required|email',
+                'password' => 'required|string'
+            ]);
 
-        $user = $this->userRepository->getByEmail($request->input('email'));
-        if ($this->isInvalidCredentials($user, $request->password)) {
-            return response()->json([
-                'error_message' => 'Invalid credentials.',
-            ], ResponseAlias::HTTP_UNAUTHORIZED);
-        }
+            $user = $this->userRepository->getByEmail($request->input('email'));
+            if ($this->isInvalidCredentials($user, $request->password)) {
+                return response()->json([
+                    'error_message' => 'Invalid credentials.',
+                ], ResponseAlias::HTTP_UNAUTHORIZED);
+            }
 
-        $existingSessions = $this->sessionRepository->allByUserId($user->id);
-        foreach ($existingSessions as $existingSession) {
-            $deleteSession->execute($existingSession);
-        }
+            $existingSessions = $this->sessionRepository->allByUserId($user->id);
+            foreach ($existingSessions as $existingSession) {
+                $jti = $existingSession->uuid;
+                $deleteSession->execute($existingSession);
+                dispatch(new BlacklistToken($jti));
+            }
 
-        $uuid = Str::uuid()->toString();
-        $tokenPayload = $jwtService->encode([
-            'user_id' => $user->id,
-            'role' => $user->role,
-            'jti' => $uuid,
-        ]);
-        $refreshTokenPayload = $jwtService->encode([
-            'user_id' => $user->id,
-            'role' => $user->role,
-            'jti' => $uuid,
-        ], 'refresh');
-        $session = $createSession->execute(
-            CreateSessionDto::createFromArray([
+            $uuid = Str::uuid()->toString();
+            $tokenPayload = $jwtService->encode([
                 'user_id' => $user->id,
-                'uuid' => $uuid,
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->header('User-Agent'),
-                'token' => $tokenPayload['token'],
-                'token_expires_at' => $tokenPayload['exp'],
-                'refresh_token' => $refreshTokenPayload['token'],
-                'refresh_token_expires_at' => $refreshTokenPayload['exp'],
-            ])
-        );
+                'role' => $user->role,
+                'jti' => $uuid,
+            ]);
+            $refreshTokenPayload = $jwtService->encode([
+                'user_id' => $user->id,
+                'role' => $user->role,
+                'jti' => $uuid,
+            ], 'refresh');
+            $session = $createSession->execute(
+                CreateSessionDto::createFromArray([
+                    'user_id' => $user->id,
+                    'uuid' => $uuid,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->header('User-Agent'),
+                    'token' => $tokenPayload['token'],
+                    'token_expires_at' => $tokenPayload['exp'],
+                    'refresh_token' => $refreshTokenPayload['token'],
+                    'refresh_token_expires_at' => $refreshTokenPayload['exp'],
+                ])
+            );
 
-        return response()->json([
-            'token' => $session->token,
-            'token_expires_at' => $session->token_expires_at,
-            'refresh_token' => $session->refresh_token,
-            'refresh_token_expires_at' => $session->refresh_token_expires_at,
-            'user' => $user,
-        ], ResponseAlias::HTTP_OK);
+            return response()->json([
+                'token' => $session->token,
+                'token_expires_at' => $session->token_expires_at,
+                'refresh_token' => $session->refresh_token,
+                'refresh_token_expires_at' => $session->refresh_token_expires_at,
+                'user' => $user,
+            ], ResponseAlias::HTTP_OK);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'errors' => $e->errors(),
+            ], ResponseAlias::HTTP_BAD_REQUEST);
+        }
     }
 
     public function logout(
@@ -96,13 +102,17 @@ class AuthController extends Controller
     ): JsonResponse
     {
         $token = $request->header('Authorization');
-        if ($token) {
-            $token = str_replace('Bearer ', '', $token);
-            $session = $this->sessionRepository->getByToken($token);
-            if ($session) {
-                $deleteSession->execute($session);
-            }
+        $token = str_replace('Bearer ', '', $token);
+        $session = $this->sessionRepository->getByToken($token);
+        if (!$session) {
+            return response()->json([
+                'success_message' => 'Invalid token.',
+            ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
+
+        $jti = $session->uuid;
+        $deleteSession->execute($session);
+        dispatch(new BlacklistToken($jti));
 
         return response()->json([
             'success_message' => 'Logged out successfully.',

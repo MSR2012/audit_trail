@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
@@ -26,6 +27,10 @@ class ForwardRequestHelper
             );
 
             return response()->json(json_decode($response->getBody()->getContents()), $response->getStatusCode())->withHeaders($response->getHeaders());
+        } catch (RequestException $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return response()->json(json_decode($e->getResponse()->getBody()->getContents()), $e->getResponse()->getStatusCode())->withHeaders($e->getResponse()->getHeaders());
         } catch (GuzzleException $e) {
             Log::error($e->getMessage(), ['exception' => $e]);
 
