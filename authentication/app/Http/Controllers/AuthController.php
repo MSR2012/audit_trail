@@ -10,7 +10,7 @@ use App\Dtos\UpdateSessionDto;
 use App\Models\User;
 use App\Repositories\SessionRepository;
 use App\Repositories\UserRepository;
-use App\Services\UuidGenerator;
+use App\Services\JwtService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -35,6 +35,7 @@ class AuthController extends Controller
      */
     public function login(
         Request       $request,
+        JwtService    $jwtService,
         CreateSession $createSession,
         DeleteSession $deleteSession
     ): JsonResponse
@@ -56,16 +57,27 @@ class AuthController extends Controller
             $deleteSession->execute($existingSession);
         }
 
+        $uuid = Str::uuid()->toString();
+        $tokenPayload = $jwtService->encode([
+            'user_id' => $user->id,
+            'role' => $user->role,
+            'jti' => $uuid,
+        ]);
+        $refreshTokenPayload = $jwtService->encode([
+            'user_id' => $user->id,
+            'role' => $user->role,
+            'jti' => $uuid,
+        ], 'refresh');
         $session = $createSession->execute(
             CreateSessionDto::createFromArray([
                 'user_id' => $user->id,
-                'uuid' => UuidGenerator::generate(),
+                'uuid' => $uuid,
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->header('User-Agent'),
-                'token' => Str::random(60),
-                'token_expires_at' => Carbon::now()->addMinutes(10)->toDateTimeString(),
-                'refresh_token' => Str::random(60),
-                'refresh_token_expires_at' => Carbon::now()->addMinutes(60)->toDateTimeString(),
+                'token' => $tokenPayload['token'],
+                'token_expires_at' => $tokenPayload['exp'],
+                'refresh_token' => $refreshTokenPayload['token'],
+                'refresh_token_expires_at' => $refreshTokenPayload['exp'],
             ])
         );
 
@@ -75,7 +87,6 @@ class AuthController extends Controller
             'refresh_token' => $session->refresh_token,
             'refresh_token_expires_at' => $session->refresh_token_expires_at,
             'user' => $user,
-            'session_uuid' => $session->uuid,
         ], ResponseAlias::HTTP_OK);
     }
 
@@ -100,6 +111,7 @@ class AuthController extends Controller
 
     public function refreshToken(
         Request       $request,
+        JwtService    $jwtService,
         UpdateSession $updateSession
     ): JsonResponse
     {
@@ -117,9 +129,15 @@ class AuthController extends Controller
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
+        $user = $this->userRepository->getByUserId($session->user_id);
+        $tokenPayload = $jwtService->encode([
+            'user_id' => $user->id,
+            'role' => $user->role,
+            'jti' => $session->uuid,
+        ]);
         $session = $updateSession->execute($session, UpdateSessionDto::createFromArray([
-            'token' => Str::random(60),
-            'token_expires_at' => Carbon::now()->addMinutes(10)->toDateTimeString(),
+            'token' => $tokenPayload['token'],
+            'token_expires_at' => $tokenPayload['exp'],
         ]));
 
         return response()->json([
@@ -127,8 +145,7 @@ class AuthController extends Controller
             'token_expires_at' => $session->token_expires_at,
             'refresh_token' => $session->refresh_token,
             'refresh_token_expires_at' => $session->refresh_token_expires_at,
-            'user' => $this->userRepository->getByUserId($session->user_id),
-            'session_uuid' => $session->uuid,
+            'user' => $user,
         ], ResponseAlias::HTTP_OK);
     }
 

@@ -1,6 +1,6 @@
 <?php namespace App\Http\Middleware;
 
-use App\Repositories\SessionRepository;
+use App\Services\JwtService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -10,7 +10,7 @@ class JwtMiddleware
 {
 
     public function __construct(
-        private readonly SessionRepository $sessionRepository
+        private readonly JwtService $jwtService
     )
     {
     }
@@ -32,8 +32,8 @@ class JwtMiddleware
         }
 
         $token = str_replace('Bearer ', '', $token);
-        $session = $this->sessionRepository->getByToken($token);
-        if (!$session || $session->token_expires_at < Carbon::now()) {
+        $sessionPayload = $this->jwtService->decode($token);
+        if (!$sessionPayload || $sessionPayload['exp'] < Carbon::now()) {
             return response()->json([
                 'error_message' => 'Invalid access token.',
             ], ResponseAlias::HTTP_UNAUTHORIZED);
