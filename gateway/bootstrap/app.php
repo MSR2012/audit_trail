@@ -80,6 +80,7 @@ $app->routeMiddleware([
     // 'auth' => App\Http\Middleware\Authenticate::class,
     'jwt' => App\Http\Middleware\JwtMiddleware::class,
     'jwt-refresh' => App\Http\Middleware\JwtRefreshMiddleware::class,
+    'throttle' => App\Http\Middleware\RequestLimiter::class,
 ]);
 
 /*

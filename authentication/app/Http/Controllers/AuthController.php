@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -44,8 +45,16 @@ class AuthController extends Controller
                 'password' => 'required|string'
             ]);
 
+            if ($this->tooManyFailedAttempts()) {
+                return response()->json([
+                    'error_message' => 'Too many attempts.',
+                ], ResponseAlias::HTTP_TOO_MANY_REQUESTS);
+            }
+
             $user = $this->userRepository->getByEmail($request->input('email'));
             if ($this->isInvalidCredentials($user, $request->password)) {
+                RateLimiter::hit($this->throttleKey(), 60);
+
                 return response()->json([
                     'error_message' => 'Invalid credentials.',
                 ], ResponseAlias::HTTP_UNAUTHORIZED);
@@ -81,6 +90,8 @@ class AuthController extends Controller
                     'refresh_token_expires_at' => $refreshTokenPayload['exp'],
                 ])
             );
+
+            RateLimiter::clear($this->throttleKey());
 
             return response()->json([
                 'token' => $session->token,
@@ -165,5 +176,19 @@ class AuthController extends Controller
     ): bool
     {
         return !$user || !Hash::check($password, $user->password);
+    }
+
+    public function throttleKey(): string
+    {
+        return request()->ip();
+    }
+
+    public function tooManyFailedAttempts(): bool
+    {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -2,6 +2,7 @@
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckAllowedDomains
 {
@@ -20,7 +21,7 @@ class CheckAllowedDomains
 
         $origin = $request->headers->get('Origin');
         if (!$origin || !in_array($origin, $allowedDomains)) {
-            return response('Forbidden', 403);
+            return response('Forbidden', Response::HTTP_FORBIDDEN);
         }
 
         return $next($request);
