@@ -16,7 +16,9 @@
 use Laravel\Lumen\Routing\Router;
 
 $router->group(['prefix' => 'authentication'], function () use ($router) {
-    return $router->post('/login', function () use ($router) {
-        return response()->json(['message' => 'Login success'], 200);
+    $router->post('/login', 'AuthController@login');
+    $router->post('/refresh_token', 'AuthController@refreshToken');
+    $router->group(['middleware' => 'jwt'], function () use ($router) {
+        $router->post('/logout', 'AuthController@logout');
     });
 });

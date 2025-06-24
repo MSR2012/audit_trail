@@ -10,10 +10,10 @@ class CheckAllowedDomains
      * Handle an incoming request.
      *
      * @param Request $request
-     * @param \Closure $next
+     * @param Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $allowedDomains = [
             env('AT_GATEWAY_BASE_URL'),
