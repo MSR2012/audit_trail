@@ -16,7 +16,6 @@
 |
 */
 
-use App\Helper\ForwardRequestHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -24,37 +23,13 @@ use Laravel\Lumen\Routing\Router;
 
 $router->group(['middleware' => 'throttle'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {
-        $router->post('/login', function (Request $request) use ($router) {
-            return ForwardRequestHelper::handle(
-                $request->method(),
-                env('AT_AUTHENTICATION_BASE_URL') . '/authentication/login'
-            );
-        });
-        $router->group(['middleware' => 'jwt'], function () use ($router) {
-            $router->post('/logout', function (Request $request) use ($router) {
-                return ForwardRequestHelper::handle(
-                    $request->method(),
-                    env('AT_AUTHENTICATION_BASE_URL') . '/authentication/logout'
-                );
-            });
-        });
-        $router->group(['middleware' => 'jwt-refresh'], function () use ($router) {
-            $router->post('/refresh_token', function (Request $request) use ($router) {
-                return ForwardRequestHelper::handle(
-                    $request->method(),
-                    env('AT_AUTHENTICATION_BASE_URL') . '/authentication/refresh_token'
-                );
-            });
-        });
+        $router->post('login', 'AuthGatewayController@login');
+        $router->post('logout', ['middleware' => 'jwt', 'uses' => 'AuthGatewayController@logout']);
+        $router->post('refresh_token', ['middleware' => 'jwt-refresh', 'uses' => 'AuthGatewayController@refreshToken']);
     });
 
     $router->group(['prefix' => 'app', 'middleware' => 'jwt'], function () use ($router) {
-        $router->get('/ips', function (Request $request) use ($router) {
-            return ForwardRequestHelper::handle(
-                $request->method(),
-                env('AT_APP_BASE_URL') . '/app/ips'
-            );
-        });
+        $router->get('ips', 'AppGatewayController@ips');
     });
 
     $router->get('/blacklist_token', function (Request $request) use ($router) {

@@ -13,6 +13,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->when('App\Http\Controllers\AuthGatewayController')
+            ->needs('App\Services\Gateways\GatewayServiceInterface')
+            ->give('App\Services\Gateways\AuthGatewayService');
+
+        $this->app->when('App\Http\Controllers\AppGatewayController')
+            ->needs('App\Services\Gateways\GatewayServiceInterface')
+            ->give('App\Services\Gateways\AppGatewayService');
     }
 }
