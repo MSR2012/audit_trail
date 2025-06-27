@@ -37,7 +37,7 @@ class JwtMiddleware
         if (
             !$tokenPayload ||
             Cache::has('blacklist_token_' . $tokenPayload['jti']) ||
-            $tokenPayload['exp'] < Carbon::now()
+            Carbon::parse($tokenPayload['exp']) < Carbon::now()
         ) {
             return response()->json([
                 'error_message' => 'Invalid access token.',

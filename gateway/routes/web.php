@@ -27,7 +27,13 @@ $router->group(['middleware' => 'throttle'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'app', 'middleware' => 'jwt'], function () use ($router) {
-        $router->get('ips', 'AppGatewayController@ips');
+        $router->group(['prefix' => 'ips'], function () use ($router) {
+            $router->get('/', 'AppGatewayController@ipIndex');
+            $router->post('/', 'AppGatewayController@ipStore');
+            $router->get('/{id}', 'AppGatewayController@ipShow');
+            $router->put('/{id}', 'AppGatewayController@ipUpdate');
+            $router->delete('/{id}', 'AppGatewayController@ipDelete');
+        });
 
         $router->get('audit_log/view-by-user/{changes_made_within}', 'AppGatewayController@auditLogViewByUser');
     });

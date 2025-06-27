@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 
 class AppGatewayController extends Controller
 {
+    private const IP_URL_BASE = 'app/ips';
+
     /**
      * Create a new controller instance.
      *
@@ -19,10 +21,38 @@ class AppGatewayController extends Controller
     {
     }
 
-    public function ips(): JsonResponse
+    public function ipIndex(): JsonResponse
     {
         return ResponseFormatter::format(
-            $this->gatewayService->forwardRequest('GET', 'app/ips')
+            $this->gatewayService->forwardRequest('GET', self::IP_URL_BASE)
+        );
+    }
+
+    public function ipStore(): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('POST', self::IP_URL_BASE)
+        );
+    }
+
+    public function ipShow($id): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('GET', self::IP_URL_BASE . '/' . $id)
+        );
+    }
+
+    public function ipUpdate($id): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('PUT', self::IP_URL_BASE . '/' . $id)
+        );
+    }
+
+    public function ipDelete($id): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('DELETE', self::IP_URL_BASE . '/' . $id)
         );
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CheckAllowedDomains;
 use App\Http\Middleware\CheckAuthenticatedRequest;
+use Illuminate\Support\Facades\Validator;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -80,9 +81,10 @@ $app->middleware([
     CheckAuthenticatedRequest::class,
 ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'can_edit_ip' => App\Http\Middleware\CanEditIpAddress::class,
+    'can_delete_ip' => App\Http\Middleware\CanDeleteIpAddress::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -95,10 +97,21 @@ $app->middleware([
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(MongoDB\Laravel\MongoDBServiceProvider::class);
+
+Validator::extend('ip', function ($attribute, $value, $parameters) {
+    if (
+        filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ||
+        filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
+    ) {
+        return true;
+    }
+
+    return false;
+});
 
 /*
 |--------------------------------------------------------------------------

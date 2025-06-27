@@ -17,8 +17,14 @@ use Laravel\Lumen\Routing\Router;
 
 $router->group(['prefix' => 'app'], function () use ($router) {
     $router->group(['prefix' => 'ips'], function () use ($router) {
-        $router->get('/', function () use ($router) {
-            return response()->json(['message' => 'All ips'], 200);
+        $router->get('/', 'IpController@index');
+        $router->post('/', 'IpController@store');
+        $router->get('/{id}', 'IpController@show');
+        $router->group(['middleware' => 'can_edit_ip'], function () use ($router) {
+            $router->put('/{id}', 'IpController@update');
+        });
+        $router->group(['middleware' => 'can_delete_ip'], function () use ($router) {
+            $router->delete('/{id}', 'IpController@delete');
         });
     });
 

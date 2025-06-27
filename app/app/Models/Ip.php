@@ -4,7 +4,7 @@ namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
 
-class AuditLog extends Model
+class Ip extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,6 @@ class AuditLog extends Model
      * @var string[]
      */
     protected $fillable = [
-        'user_id', 'jti', 'ip_address', 'action', 'changes', 'ip', 'user_agent',
+        'user_id', 'ip_address', 'label', 'comment',
     ];
 }
