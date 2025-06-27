@@ -17,5 +17,13 @@ class AppServiceProvider extends ServiceProvider
             'App\Services\Securities\EncoderInterface',
             'App\Services\Securities\JwtService'
         );
+        $this->app->bind(
+            'App\Services\Auth\AuthServiceInterface',
+            'App\Services\Auth\AuthService'
+        );
+        $this->app->bind(
+            'App\Services\Throttle\ThrottleServiceInterface',
+            'App\Services\Throttle\ThrottleService'
+        );
     }
 }
