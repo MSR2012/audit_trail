@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\ResponseFormatter;
 use App\Services\Gateways\GatewayServiceInterface;
+use Illuminate\Http\JsonResponse;
 
 class AppGatewayController extends Controller
 {
@@ -18,7 +19,7 @@ class AppGatewayController extends Controller
     {
     }
 
-    public function ips()
+    public function ips(): JsonResponse
     {
         return ResponseFormatter::format(
             $this->gatewayService->forwardRequest('GET', 'app/ips')

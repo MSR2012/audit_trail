@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\ResponseFormatter;
 use App\Services\Gateways\GatewayServiceInterface;
+use Illuminate\Http\JsonResponse;
 
 class AuthGatewayController extends Controller
 {
@@ -18,21 +19,21 @@ class AuthGatewayController extends Controller
     {
     }
 
-    public function login()
+    public function login(): JsonResponse
     {
         return ResponseFormatter::format(
             $this->gatewayService->forwardRequest('POST', '/authentication/login')
         );
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         return ResponseFormatter::format(
             $this->gatewayService->forwardRequest('POST', '/authentication/logout')
         );
     }
 
-    public function refreshToken()
+    public function refreshToken(): JsonResponse
     {
         return ResponseFormatter::format(
             $this->gatewayService->forwardRequest('POST', '/authentication/refresh_token')

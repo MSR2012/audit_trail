@@ -17,8 +17,6 @@
 */
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Lumen\Routing\Router;
 
 $router->group(['middleware' => 'throttle'], function () use ($router) {
@@ -32,13 +30,5 @@ $router->group(['middleware' => 'throttle'], function () use ($router) {
         $router->get('ips', 'AppGatewayController@ips');
     });
 
-    $router->get('/blacklist_token', function (Request $request) use ($router) {
-        Cache::put(
-            'blacklist_token_' . $request->get('jti'),
-            $request->get('jti'),
-            Carbon::now()->addMinutes(env('ACCESS_TOKEN_LIFETIME'))
-        );
-
-        return response()->json();
-    });
+    $router->get('blacklist_token', 'TokenController@putInBlacklist');
 });
