@@ -85,6 +85,7 @@ class AuthService implements AuthServiceInterface
             'refresh_token' => $session->refresh_token,
             'refresh_token_expires_at' => $session->refresh_token_expires_at,
             'user' => $user,
+            'jti' => $uuid,
         ];
     }
 

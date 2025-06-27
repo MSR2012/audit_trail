@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\CheckAllowedDomains;
+use App\Http\Middleware\CheckAuthenticatedRequest;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -73,7 +76,8 @@ $app->configure('app');
 */
 
 $app->middleware([
-    App\Http\Middleware\CheckAllowedDomains::class
+    CheckAllowedDomains::class,
+    CheckAuthenticatedRequest::class,
 ]);
 
 // $app->routeMiddleware([
@@ -94,6 +98,7 @@ $app->middleware([
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(MongoDB\Laravel\MongoDBServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

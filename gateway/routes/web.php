@@ -28,6 +28,8 @@ $router->group(['middleware' => 'throttle'], function () use ($router) {
 
     $router->group(['prefix' => 'app', 'middleware' => 'jwt'], function () use ($router) {
         $router->get('ips', 'AppGatewayController@ips');
+
+        $router->get('audit_log/view-by-user/{changes_made_within}', 'AppGatewayController@auditLogViewByUser');
     });
 
     $router->get('blacklist_token', 'TokenController@putInBlacklist');

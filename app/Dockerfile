@@ -12,7 +12,12 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip\
+    libcurl4-openssl-dev\
+    pkg-config\
+    libssl-dev
+
+RUN pecl install mongodb && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongo.ini
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

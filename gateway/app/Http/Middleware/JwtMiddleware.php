@@ -44,6 +44,10 @@ class JwtMiddleware
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
+        $request->headers->set('AT-USER-ID', $tokenPayload['user_id']);
+        $request->headers->set('AT-ROLE', $tokenPayload['role']);
+        $request->headers->set('AT-JTI', $tokenPayload['jti']);
+
         return $next($request);
     }
 }

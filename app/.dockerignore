@@ -1,0 +1,19 @@
+# IDE project files
+.buildpath
+.project
+.settings
+.idea/
+nbproject/
+.git
+
+# media cache files
+.DS_Store
+.DS_Store?
+Thumbs.db
+
+# composer
+/vendor
+
+# phpunit
+phpunit.xml
+phpunit-results.xml

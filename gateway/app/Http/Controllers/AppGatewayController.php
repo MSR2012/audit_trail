@@ -25,4 +25,11 @@ class AppGatewayController extends Controller
             $this->gatewayService->forwardRequest('GET', 'app/ips')
         );
     }
+
+    public function auditLogViewByUser(int $changes_made_within = 1): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('GET', 'app/audit_log/view-by-user/' . $changes_made_within)
+        );
+    }
 }

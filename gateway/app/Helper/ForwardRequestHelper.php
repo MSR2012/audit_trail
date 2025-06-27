@@ -17,7 +17,6 @@ class ForwardRequestHelper
         array  $payload = [],
     ): GatewayResponseDto
     {
-        Log::error($payload);
         try {
             $client = new Client();
             $response = $client->request(

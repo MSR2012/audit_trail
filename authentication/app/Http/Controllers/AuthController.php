@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidTokenException;
 use App\Exceptions\InvalidLoginCredentialsException;
 use App\Exceptions\TooManyFailedAttemptsException;
+use App\Jobs\AuditLogTrigger;
 use App\Services\Auth\AuthServiceInterface;
 use App\Services\Throttle\ThrottleServiceInterface;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,14 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class AuthController extends Controller
 {
+    private const ACTION_LOGIN = 1;
+    private const ACTION_LOGOUT = 2;
+
     /**
      */
     public function __construct(
-        private readonly AuthServiceInterface     $authService,
-        private readonly ThrottleServiceInterface $throttleService
+        private AuthServiceInterface     $authService,
+        private ThrottleServiceInterface $throttleService
     )
     {
     }
@@ -42,6 +46,18 @@ class AuthController extends Controller
                 $request->header('User-Agent')
             );
             $this->throttleService->clear();
+
+            $user = $responseBody['user'];
+            dispatch(new AuditLogTrigger(
+                array_merge($request->headers->all(), [
+                    'AT-USER-ID' => (int)$user->id,
+                    'AT-ROLE' => (int)$user->role,
+                    'AT-JTI' => $responseBody['jti'],
+                ]),
+                self::ACTION_LOGIN,
+                'Logged in successfully.',
+            ));
+            unset($responseBody['jti']);
 
             return response()->json($responseBody, ResponseAlias::HTTP_OK);
         } catch (TooManyFailedAttemptsException $e) {
@@ -67,6 +83,12 @@ class AuthController extends Controller
             $token = $request->header('Authorization');
             $token = str_replace('Bearer ', '', $token);
             $this->authService->logout($token);
+
+            dispatch(new AuditLogTrigger(
+                $request->headers->all(),
+                self::ACTION_LOGOUT,
+                'Logged out successfully.',
+            ));
 
             return response()->json([
                 'success_message' => 'Logged out successfully.',

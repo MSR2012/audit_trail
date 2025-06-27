@@ -2,9 +2,8 @@
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
-class CheckAllowedDomains
+class CheckAuthenticatedRequest
 {
     /**
      * Handle an incoming request.
@@ -15,13 +14,11 @@ class CheckAllowedDomains
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $allowedDomains = [
-            env('AT_GATEWAY_BASE_URL'),
-            env('AT_AUTHENTICATION_BASE_URL'),
-        ];
-
-        $origin = $request->headers->get('Origin');
-        if (!$origin || !in_array($origin, $allowedDomains)) {
+        if (
+            !$request->headers->has('at-user-id') ||
+            !$request->headers->has('at-role') ||
+            !$request->headers->has('at-jti')
+        ) {
             return response('Forbidden', 403);
         }
 
