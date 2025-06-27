@@ -1,6 +1,6 @@
 <?php namespace App\Http\Middleware;
 
-use App\Services\JwtService;
+use App\Services\Securities\DecoderInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -11,7 +11,7 @@ class JwtMiddleware
 {
 
     public function __construct(
-        private readonly JwtService $jwtService
+        private readonly DecoderInterface $decoderService
     )
     {
     }
@@ -33,7 +33,7 @@ class JwtMiddleware
         }
 
         $token = str_replace('Bearer ', '', $token);
-        $tokenPayload = $this->jwtService->decode($token);
+        $tokenPayload = $this->decoderService->decode($token);
         if (
             !$tokenPayload ||
             Cache::has('blacklist_token_' . $tokenPayload['jti']) ||

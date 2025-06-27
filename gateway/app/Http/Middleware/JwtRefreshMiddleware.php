@@ -1,6 +1,6 @@
 <?php namespace App\Http\Middleware;
 
-use App\Services\JwtService;
+use App\Services\Securities\DecoderInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -10,7 +10,7 @@ class JwtRefreshMiddleware
 {
 
     public function __construct(
-        private readonly JwtService $jwtService
+        private readonly DecoderInterface $decoderService
     )
     {
     }
@@ -31,7 +31,7 @@ class JwtRefreshMiddleware
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
-        $refreshTokenPayload = $this->jwtService->decode($token);
+        $refreshTokenPayload = $this->decoderService->decode($token);
         if (!$refreshTokenPayload || $refreshTokenPayload['exp'] < Carbon::now()) {
             return response()->json([
                 'error_message' => 'Invalid refresh token.',

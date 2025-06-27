@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Securities;
 
-class JwtService
+class JwtService implements DecoderInterface
 {
     private string $secretKey;
     private string $alg;

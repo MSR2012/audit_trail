@@ -11,7 +11,7 @@ use App\Jobs\BlacklistToken;
 use App\Models\User;
 use App\Repositories\SessionRepository;
 use App\Repositories\UserRepository;
-use App\Services\JwtService;
+use App\Services\Securities\EncoderInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -33,10 +33,10 @@ class AuthController extends Controller
     }
 
     public function login(
-        Request       $request,
-        JwtService    $jwtService,
-        CreateSession $createSession,
-        DeleteSession $deleteSession
+        Request          $request,
+        EncoderInterface $encoderService,
+        CreateSession    $createSession,
+        DeleteSession    $deleteSession
     ): JsonResponse
     {
         try {
@@ -68,12 +68,12 @@ class AuthController extends Controller
             }
 
             $uuid = Str::uuid()->toString();
-            $tokenPayload = $jwtService->encode([
+            $tokenPayload = $encoderService->encode([
                 'user_id' => $user->id,
                 'role' => $user->role,
                 'jti' => $uuid,
             ]);
-            $refreshTokenPayload = $jwtService->encode([
+            $refreshTokenPayload = $encoderService->encode([
                 'user_id' => $user->id,
                 'role' => $user->role,
                 'jti' => $uuid,
@@ -131,9 +131,9 @@ class AuthController extends Controller
     }
 
     public function refreshToken(
-        Request       $request,
-        JwtService    $jwtService,
-        UpdateSession $updateSession
+        Request          $request,
+        EncoderInterface $encoderService,
+        UpdateSession    $updateSession
     ): JsonResponse
     {
         $refreshToken = $request->header('Refresh-Token');
@@ -151,7 +151,7 @@ class AuthController extends Controller
         }
 
         $user = $this->userRepository->getByUserId($session->user_id);
-        $tokenPayload = $jwtService->encode([
+        $tokenPayload = $encoderService->encode([
             'user_id' => $user->id,
             'role' => $user->role,
             'jti' => $session->uuid,

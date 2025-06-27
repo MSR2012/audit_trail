@@ -20,5 +20,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->when('App\Http\Controllers\AppGatewayController')
             ->needs('App\Services\Gateways\GatewayServiceInterface')
             ->give('App\Services\Gateways\AppGatewayService');
+
+        $this->app->bind(
+            'App\Services\Securities\DecoderInterface',
+            'App\Services\Securities\JwtService'
+        );
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Securities;
 
 use Illuminate\Support\Carbon;
 
-class JwtService
+class JwtService implements EncoderInterface
 {
     private string $secretKey;
     private string $alg;
