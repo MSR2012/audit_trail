@@ -38,7 +38,7 @@ class AuditLog extends Model
     public function scopeSession(Builder $query, ?string $sessionId): Builder
     {
         return $query->when(!empty($sessionId), function ($query) use ($sessionId) {
-            $query->where('session_id', $sessionId);
+            $query->where('jti', $sessionId);
         });
     }
 }
