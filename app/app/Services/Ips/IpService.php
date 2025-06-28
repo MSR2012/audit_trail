@@ -115,6 +115,7 @@ class IpService implements IpServiceInterface
         if (!$ip) {
             throw new RecordsNotFoundException('Ip not found.');
         }
+
         $this->deleteIp->execute($ip);
     }
 }

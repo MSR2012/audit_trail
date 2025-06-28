@@ -16,11 +16,7 @@ class AuditLogService implements AuditLogServiceInterface
     {
     }
 
-    public function index(
-        ?int    $userId = null,
-        ?string $ipAddress = null,
-        ?string $sessionId = null
-    ): array
+    public function index(?int $userId = null, ?string $ipAddress = null, ?string $sessionId = null): array
     {
         $auditLogs = $this->auditLogRepository->all($userId, $ipAddress, $sessionId);
 
