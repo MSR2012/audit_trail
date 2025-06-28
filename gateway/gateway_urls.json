@@ -1,0 +1,200 @@
+{
+    "info": {
+        "_postman_id": "1915abe6-1493-4486-a010-52e582d47e5b",
+        "name": "Gateway",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "http://localhost:8000/auth/login",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "email",
+                            "value": "admin@admin.com",
+                            "type": "text"
+                        },
+                        {
+                            "key": "password",
+                            "value": "admin@123456",
+                            "type": "text"
+                        }
+                    ],
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:8000/auth/login",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "auth",
+                        "login"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "http://localhost:8000/auth/logout",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJzaGEyNTYiLCJ0eXAiOiJKV1QifQ.eyJ1c2VyX2lkIjoxLCJyb2xlIjoxLCJqdGkiOiJlOWUyZDVhNi1jMzg0LTRkMDktYTY4YS0wYWI3ZjU4YzY3NGQiLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3QiLCJleHAiOiIyMDI1LTA2LTI3VDE3OjMwOjU5Ljc2MDcwMVoifQ.nbKX0zb2eTFPjo5NOl0oDWf5PXvFfA1nl7JmndPoPEY",
+                        "type": "default"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8000/auth/logout",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "auth",
+                        "logout"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "http://localhost:8000/auth/refresh_token",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Refresh-Token",
+                        "value": "eyJhbGciOiJzaGEyNTYiLCJ0eXAiOiJKV1QifQ.eyJ1c2VyX2lkIjoxLCJyb2xlIjoxLCJqdGkiOiIxMmMyYTRhNy03ZDY5LTQyYWItYmY1NS01YTliZTU0MzBlNWYiLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3QiLCJleHAiOiIyMDI1LTA2LTI0VDE1OjAzOjU3LjU2NDY1OVoifQ.hkT6In4AmNkae3uBFpp1puzp7LukPgAvqnlRivLrsuU",
+                        "type": "default"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8000/auth/refresh_token",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "auth",
+                        "refresh_token"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "http://localhost:8000/app/ips",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJzaGEyNTYiLCJ0eXAiOiJKV1QifQ.eyJ1c2VyX2lkIjoxLCJyb2xlIjoxLCJqdGkiOiJmYThiZGNlZi0zNzdiLTQ5OTEtOTQ4YS1jNTEwODBlMjgwYjMiLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3QiLCJleHAiOiIyMDI1LTA2LTI3VDE5OjM4OjUyLjE0MjE1MloifQ.V8UqfY2ZEjVFL3ERHDUPhu0ISZ9ytbUHZf9SbOG6TZo",
+                        "type": "default"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "ip_address",
+                            "value": "127.0.0.1",
+                            "type": "default"
+                        },
+                        {
+                            "key": "label",
+                            "value": "localhost",
+                            "type": "default"
+                        },
+                        {
+                            "key": "comment",
+                            "value": "",
+                            "type": "default"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://localhost:8000/app/ips",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "app",
+                        "ips"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "http://localhost:8000/app/ips/685ef29fe9f2f14d760407e7",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJzaGEyNTYiLCJ0eXAiOiJKV1QifQ.eyJ1c2VyX2lkIjoxLCJyb2xlIjoxLCJqdGkiOiJmYThiZGNlZi0zNzdiLTQ5OTEtOTQ4YS1jNTEwODBlMjgwYjMiLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3QiLCJleHAiOiIyMDI1LTA2LTI3VDE5OjM4OjUyLjE0MjE1MloifQ.V8UqfY2ZEjVFL3ERHDUPhu0ISZ9ytbUHZf9SbOG6TZo",
+                        "type": "default"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8000/app/ips/685ef29fe9f2f14d760407e7",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "app",
+                        "ips",
+                        "685ef29fe9f2f14d760407e7"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "http://localhost:8000/app/audit_log",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer eyJhbGciOiJzaGEyNTYiLCJ0eXAiOiJKV1QifQ.eyJ1c2VyX2lkIjoxLCJyb2xlIjoxLCJqdGkiOiJhNzNmOGNiZi0zNmRhLTQ5ZDYtOTBlYS0xNDllNjkyNDBjYjQiLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3QiLCJleHAiOiIyMDI1LTA2LTI4VDA3OjUzOjM0LjczMjUyM1oifQ.bRZEmeH2UhZErVfQOVX_R3zBgopB2uA75MyY2Tef7xo",
+                        "type": "default"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8000/app/audit_log",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "app",
+                        "audit_log"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

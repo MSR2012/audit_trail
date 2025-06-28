@@ -18,9 +18,7 @@ class CanDeleteIpAddress
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (
-            $request->headers->get('at-role') != Role::ADMIN
-        ) {
+        if ($request->headers->get('at-role') != Role::ADMIN) {
             return response()->json([
                 'message' => 'Unauthorized',
             ], ResponseAlias::HTTP_FORBIDDEN);

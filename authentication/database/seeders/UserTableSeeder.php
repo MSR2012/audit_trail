@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserTableSeeder extends Seeder
 {
+    private const ROLE_USER = 1;
+    private const ROLE_ADMIN = 2;
+
     /**
      * Run the database seeds.
      */
@@ -19,7 +22,7 @@ class UserTableSeeder extends Seeder
             'email' => 'admin@admin.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('admin@123456'),
-            'role' => 1,
+            'role' => self::ROLE_ADMIN,
         ]);
 
         DB::table('users')->insert([
@@ -27,7 +30,7 @@ class UserTableSeeder extends Seeder
             'email' => 'user@user.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('user@123456'),
-            'role' => 0,
+            'role' => self::ROLE_USER,
         ]);
     }
 }

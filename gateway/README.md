@@ -26,4 +26,9 @@ Then run composer to install all dependencies inside container.
 composer install
 ```
 
-After all microservices is up and running, then follow api docs under Docs folder.
+After all microservices is up and running, then follow api docs under `Docs` folder.
+
+### Try running base url for gateway service - `http://localhost:8000/`, should give an welcome message.
+
+## Postman Collection
+Postman collection also added, import in postman and test.

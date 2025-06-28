@@ -19,6 +19,9 @@
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Router;
 
+$router->get('/', function (Request $request) {
+    return response()->json(['message' => 'Welcome to gateway!']);
+});
 $router->group(['middleware' => 'throttle'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {
         $router->post('login', 'AuthGatewayController@login');
