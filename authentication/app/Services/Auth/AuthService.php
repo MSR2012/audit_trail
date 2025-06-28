@@ -29,18 +29,12 @@ class AuthService implements AuthServiceInterface
         private readonly DeleteSession     $deleteSession,
     )
     {
-
     }
 
     /**
      * @throws InvalidLoginCredentialsException
      */
-    public function login(
-        string $email,
-        string $password,
-        string $ip = '',
-        string $userAgent = ''
-    ): array
+    public function login(string $email, string $password, string $ip = '', string $userAgent = ''): array
     {
         $user = $this->userRepository->getByEmail($email);
         if ($this->isInvalidCredentials($user, $password)) {
@@ -135,10 +129,7 @@ class AuthService implements AuthServiceInterface
         ];
     }
 
-    private function isInvalidCredentials(
-        ?User  $user,
-        string $password
-    ): bool
+    private function isInvalidCredentials(?User $user, string $password): bool
     {
         return !$user || !Hash::check($password, $user->password);
     }

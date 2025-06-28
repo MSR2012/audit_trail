@@ -13,9 +13,7 @@ class AuthGatewayController extends Controller
      *
      * @return void
      */
-    public function __construct(
-        private GatewayServiceInterface $gatewayService
-    )
+    public function __construct(private readonly GatewayServiceInterface $gatewayService)
     {
     }
 

@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class SessionRepository
 {
-    public function __construct(
-        private readonly Session $session
-    )
+    public function __construct(private readonly Session $session)
     {
     }
 

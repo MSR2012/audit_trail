@@ -1,4 +1,6 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use App\Constants\Role;
 use App\Repositories\IpRepository;
@@ -8,9 +10,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CanEditIpAddress
 {
-    public function __construct(
-        private readonly IpRepository $ipRepository,
-    )
+    public function __construct(private readonly IpRepository $ipRepository)
     {
     }
 

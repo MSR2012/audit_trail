@@ -17,9 +17,7 @@ class IpController extends Controller
      *
      * @return void
      */
-    public function __construct(
-        private IpServiceInterface $ipService
-    )
+    public function __construct(private readonly IpServiceInterface $ipService)
     {
     }
 
@@ -82,11 +80,12 @@ class IpController extends Controller
             ]);
 
             return response()->json(
-                array_merge($this->ipService->update(
-                    $id,
-                    $request->input('label'),
-                    $request->input('comment', ''),
-                ),
+                array_merge(
+                    $this->ipService->update(
+                        $id,
+                        $request->input('label'),
+                        $request->input('comment', '')
+                    ),
                     [
                         'message' => 'Ip updated successfully.',
                     ]

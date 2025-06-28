@@ -2,10 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Carbon;
 use MongoDB\Laravel\Eloquent\Builder;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
+ * @property string|null $id
+ * @property string|null $user_id
+ * @property string|null $jti
+ * @property string|null $ip_address
+ * @property string|null $action
+ * @property string|null $changes
+ * @property string|null $ip
+ * @property string|null $user_agent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * @method Builder|static userId(?int $userId)
  * @method Builder|static ipAddress(?string $ipAddress)
  * @method Builder|static session(?string $sessionId)

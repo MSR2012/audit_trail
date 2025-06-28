@@ -9,9 +9,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class JwtRefreshMiddleware
 {
 
-    public function __construct(
-        private readonly DecoderInterface $decoderService
-    )
+    public function __construct(private readonly DecoderInterface $decoderService)
     {
     }
 

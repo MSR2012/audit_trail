@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseFormatter;
 use App\Services\Gateways\GatewayServiceInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 
 class AppGatewayController extends Controller
 {
@@ -16,9 +15,7 @@ class AppGatewayController extends Controller
      *
      * @return void
      */
-    public function __construct(
-        private GatewayServiceInterface $gatewayService
-    )
+    public function __construct(private readonly GatewayServiceInterface $gatewayService)
     {
     }
 

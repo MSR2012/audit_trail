@@ -21,8 +21,8 @@ class AuthController extends Controller
     /**
      */
     public function __construct(
-        private AuthServiceInterface     $authService,
-        private ThrottleServiceInterface $throttleService
+        private readonly AuthServiceInterface $authService,
+        private readonly ThrottleServiceInterface $throttleService
     )
     {
     }

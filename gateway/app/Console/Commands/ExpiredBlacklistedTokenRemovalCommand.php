@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
@@ -43,10 +44,7 @@ class ExpiredBlacklistedTokenRemovalCommand extends Command
         return CommandAlias::SUCCESS;
     }
 
-    private function removeExpiredCacheFiles(
-        Filesystem $filesystem,
-        string     $directory
-    ): void
+    private function removeExpiredCacheFiles(Filesystem $filesystem, string $directory): void
     {
         foreach ($filesystem->allFiles($directory) as $cacheFile) {
             if ($cacheFile == '.gitignore') {
@@ -62,15 +60,14 @@ class ExpiredBlacklistedTokenRemovalCommand extends Command
 
                 $filesystem->delete($cacheFile);
             } catch (FileNotFoundException $e) {
+                Log::error($e->getMessage());
+
                 continue;
             }
         }
     }
 
-    private function removeDirectories(
-        Filesystem $filesystem,
-        string     $directory
-    ): void
+    private function removeDirectories(Filesystem $filesystem, string $directory): void
     {
         foreach ($filesystem->directories($directory) as $directory) {
             try {
@@ -82,6 +79,8 @@ class ExpiredBlacklistedTokenRemovalCommand extends Command
 
                 $filesystem->deleteDirectory($directory);
             } catch (DirectoryNotFoundException $e) {
+                Log::error($e->getMessage());
+
                 continue;
             }
         }

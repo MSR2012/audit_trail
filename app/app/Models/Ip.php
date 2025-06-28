@@ -3,11 +3,21 @@
 namespace App\Models;
 
 use App\Observers\IpObserver;
+use Illuminate\Support\Carbon;
 use MongoDB\Laravel\Eloquent\Model;
 
+/**
+ * @property string|null $id
+ * @property int|null $user_id
+ * @property string|null $ip_address
+ * @property string|null $label
+ * @property string|null $comment
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 class Ip extends Model
 {
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

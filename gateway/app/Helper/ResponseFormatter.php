@@ -12,6 +12,7 @@ class ResponseFormatter
         if (empty($gatewayResponseDto->headers)) {
             return response()->json($gatewayResponseDto->body, $gatewayResponseDto->code);
         }
+
         return response()->json($gatewayResponseDto->body, $gatewayResponseDto->code)->withHeaders($gatewayResponseDto->headers);
     }
 }

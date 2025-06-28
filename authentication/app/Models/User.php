@@ -11,6 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
 /**
+ * @property int|null $id
+ * @property string|null $name
+ * @property string|null $email
+ * @property string|null $password
+ * @property int|null role
  * @mixin Builder
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract
