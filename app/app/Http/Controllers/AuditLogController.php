@@ -65,7 +65,7 @@ class AuditLogController extends Controller
             ), ResponseAlias::HTTP_OK);
     }
 
-    public function viewByIp(Request $request, int $ip_address, int $changes_within): JsonResponse
+    public function viewByIp(Request $request, string $ip_address, int $changes_within): JsonResponse
     {
         $userId = null;
         $sessionId = null;

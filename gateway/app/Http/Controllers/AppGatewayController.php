@@ -78,7 +78,7 @@ class AppGatewayController extends Controller
         );
     }
 
-    public function auditLogViewByIp(int $ip_address, int $changes_within): JsonResponse
+    public function auditLogViewByIp(string $ip_address, int $changes_within): JsonResponse
     {
         return ResponseFormatter::format(
             $this->gatewayService->forwardRequest('GET', 'app/audit_log/view-by-ip/' . $ip_address . '/' . $changes_within)

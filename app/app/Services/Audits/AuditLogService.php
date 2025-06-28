@@ -30,6 +30,7 @@ class AuditLogService implements AuditLogServiceInterface
                 'ip_address' => $auditLog->ip_address,
                 'action' => $auditLog->action,
                 'changes' => $auditLog->changes,
+                'changes_made_at' => $auditLog->created_at,
             ];
         })->toArray();
     }
