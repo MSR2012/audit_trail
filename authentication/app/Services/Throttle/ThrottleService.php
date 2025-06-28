@@ -11,7 +11,7 @@ class ThrottleService implements ThrottleServiceInterface
 
     public function __construct(private readonly Request $request)
     {
-        $this->maxAttempts = 5;
+        $this->maxAttempts = env('MAX_LOGIN_ATTEMPT');
     }
 
     public function throttleKey(): string

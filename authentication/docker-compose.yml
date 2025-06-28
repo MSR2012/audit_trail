@@ -35,10 +35,10 @@ services:
     ports:
       - "${AT_AUTHENTICATION_LOCAL_DB_PORT}:${AT_AUTHENTICATION_DOCKER_DB_PORT}"
     environment:
-      MYSQL_DATABASE: at-authentication
-      MYSQL_ROOT_PASSWORD: at-authentication
-      MYSQL_PASSWORD: at-authentication
-      MYSQL_USER: at-authentication
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_USER: "${DB_USERNAME}"
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:

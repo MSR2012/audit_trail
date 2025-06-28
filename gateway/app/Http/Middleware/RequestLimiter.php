@@ -22,7 +22,7 @@ class RequestLimiter
             ], ResponseAlias::HTTP_TOO_MANY_REQUESTS);
         }
 
-        RateLimiter::hit($this->throttleKey(), 60);
+        RateLimiter::hit($this->throttleKey());
 
         return $next($request);
     }
@@ -34,7 +34,7 @@ class RequestLimiter
 
     public function tooManyFailedAttempts(): bool
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 10)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), env('MAX_REQUEST_ATTEMPT'))) {
             return false;
         }
 

@@ -9,25 +9,14 @@ use Illuminate\Support\Facades\Cache;
 
 class TokenController extends Controller
 {
-    private int $lifetime;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->lifetime = env('ACCESS_TOKEN_LIFETIME');
-    }
-
     public function putInBlacklist(Request $request): JsonResponse
     {
         $jti = $request->get('jti');
+        $expiresAt = $request->get('exp');
         Cache::put(
             'blacklist_token_' . $jti,
             $jti,
-            Carbon::now()->addMinutes($this->lifetime)
+            Carbon::parse($expiresAt)->addHour()
         );
 
         return response()->json();

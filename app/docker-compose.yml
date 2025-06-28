@@ -32,8 +32,8 @@ services:
     image: mongo:5.0.2
     container_name: at-app-db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=at-app-db
+      - MONGO_INITDB_ROOT_USERNAME="${MONGODB_USER}"
+      - MONGO_INITDB_ROOT_PASSWORD="${MONGODB_DATABASE}"
     ports:
       - "${AT_APP_LOCAL_DB_PORT}:${AT_APP_DOCKER_DB_PORT}"
     volumes:

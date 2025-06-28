@@ -44,9 +44,10 @@ class AuthService implements AuthServiceInterface
         $existingSessions = $this->sessionRepository->allByUserId($user->id);
         foreach ($existingSessions as $existingSession) {
             $jti = $existingSession->uuid;
+            $token_expires_at = $existingSession->token_expires_at;
             $this->deleteSession->execute($existingSession);
 
-            dispatch(new BlacklistToken($jti));
+            dispatch(new BlacklistToken($jti, $token_expires_at));
         }
 
         $uuid = Str::uuid()->toString();
@@ -94,9 +95,10 @@ class AuthService implements AuthServiceInterface
         }
 
         $jti = $session->uuid;
+        $token_expires_at = $session->token_expires_at;
         $this->deleteSession->execute($session);
 
-        dispatch(new BlacklistToken($jti));
+        dispatch(new BlacklistToken($jti, $token_expires_at));
     }
 
     /**
