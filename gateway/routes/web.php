@@ -35,7 +35,12 @@ $router->group(['middleware' => 'throttle'], function () use ($router) {
             $router->delete('/{id}', 'AppGatewayController@ipDelete');
         });
 
-        $router->get('audit_log/view-by-user/{changes_made_within}', 'AppGatewayController@auditLogViewByUser');
+        $router->group(['prefix' => 'audit_log'], function () use ($router) {
+            $router->get('/', 'AppGatewayController@auditLogIndex');
+            $router->get('/view-by-user/{changes_within}', 'AppGatewayController@auditLogViewByLoggedInUser');
+            $router->get('/view-by-user/{user_id}/{changes_within}', 'AppGatewayController@auditLogViewByUser');
+            $router->get('/view-by-ip/{ip_address}/{changes_within}', 'AppGatewayController@auditLogViewByIp');
+        });
     });
 
     $router->get('blacklist_token', 'TokenController@putInBlacklist');

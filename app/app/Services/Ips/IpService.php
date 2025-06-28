@@ -60,12 +60,7 @@ class IpService implements IpServiceInterface
     /**
      * @throws DuplicateRecordException
      */
-    public function store(
-        int    $userId,
-        string $ipAddress,
-        string $label,
-        string $comment
-    ): array
+    public function store(int $userId, string $ipAddress, string $label, string $comment): array
     {
         if (!empty($this->ipRepository->getByIpAddress($ipAddress))) {
             throw new DuplicateRecordException('Ip address already exists.');
@@ -90,11 +85,7 @@ class IpService implements IpServiceInterface
     /**
      * @throws RecordsNotFoundException
      */
-    public function update(
-        string $id,
-        string $label,
-        string $comment
-    ): array
+    public function update(string $id, string $label, string $comment): array
     {
         $ip = $this->ipRepository->get($id);
         if (!$ip) {

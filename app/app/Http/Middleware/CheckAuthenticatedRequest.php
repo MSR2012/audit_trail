@@ -2,6 +2,7 @@
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CheckAuthenticatedRequest
 {
@@ -19,7 +20,9 @@ class CheckAuthenticatedRequest
             !$request->headers->has('at-role') ||
             !$request->headers->has('at-jti')
         ) {
-            return response('Forbidden', 403);
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], ResponseAlias::HTTP_FORBIDDEN);
         }
 
         return $next($request);

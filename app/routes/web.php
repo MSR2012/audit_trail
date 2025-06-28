@@ -29,8 +29,10 @@ $router->group(['prefix' => 'app'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'audit_log'], function () use ($router) {
-        $router->get('view-by-user/{changes_made_within}', 'AuditLogController@viewByUser');
-        $router->get('view-by-ip/{ip_address}/{changes_made_within}', 'AuditLogController@viewByUser');
+        $router->get('/', 'AuditLogController@index');
+        $router->get('/view-by-user/{changes_within}', 'AuditLogController@viewByLoggedInUser');
+        $router->get('/view-by-user/{user_id}/{changes_within}', 'AuditLogController@viewByUser');
+        $router->get('/view-by-ip/{ip_address}/{changes_within}', 'AuditLogController@viewByIp');
         $router->post('create', 'AuditLogController@create');
     });
 });

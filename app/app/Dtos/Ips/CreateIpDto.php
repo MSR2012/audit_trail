@@ -8,7 +8,7 @@ class CreateIpDto
         public int    $userId,
         public string $ipAddress,
         public string $label,
-        public string $comment,
+        public string $comment
     )
     {
     }

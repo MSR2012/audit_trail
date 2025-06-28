@@ -2,7 +2,7 @@
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CheckAllowedDomains
 {
@@ -21,7 +21,9 @@ class CheckAllowedDomains
 
         $origin = $request->headers->get('Origin');
         if (!$origin || !in_array($origin, $allowedDomains)) {
-            return response('Forbidden', Response::HTTP_FORBIDDEN);
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], ResponseAlias::HTTP_FORBIDDEN);
         }
 
         return $next($request);

@@ -4,11 +4,12 @@ use App\Constants\Role;
 use App\Repositories\IpRepository;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CanEditIpAddress
 {
     public function __construct(
-        private IpRepository $ipRepository,
+        private readonly IpRepository $ipRepository,
     )
     {
     }
@@ -26,7 +27,9 @@ class CanEditIpAddress
             $request->headers->get('at-role') != Role::ADMIN &&
             !$this->ipRepository->get($request->route('id'))
         ) {
-            return response('Forbidden', 403);
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], ResponseAlias::HTTP_FORBIDDEN);
         }
 
         return $next($request);

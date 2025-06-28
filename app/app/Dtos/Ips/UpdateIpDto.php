@@ -6,7 +6,7 @@ class UpdateIpDto
 {
     private function __construct(
         public string $label,
-        public string $comment,
+        public string $comment
     )
     {
     }

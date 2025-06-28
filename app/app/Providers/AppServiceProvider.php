@@ -17,5 +17,9 @@ class AppServiceProvider extends ServiceProvider
             'App\Services\Ips\IpServiceInterface',
             'App\Services\Ips\IpService'
         );
+        $this->app->bind(
+            'App\Services\Audits\AuditLogServiceInterface',
+            'App\Services\Audits\AuditLogService'
+        );
     }
 }

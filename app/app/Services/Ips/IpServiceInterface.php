@@ -17,21 +17,12 @@ interface IpServiceInterface
     /**
      * @throws DuplicateRecordException
      */
-    public function store(
-        int    $userId,
-        string $ipAddress,
-        string $label,
-        string $comment
-    ): array;
+    public function store(int $userId, string $ipAddress, string $label, string $comment): array;
 
     /**
      * @throws RecordsNotFoundException
      */
-    public function update(
-        string $id,
-        string $label,
-        string $comment
-    ): array;
+    public function update(string $id, string $label, string $comment): array;
 
     /**
      * @throws RecordsNotFoundException

@@ -3,6 +3,7 @@
 use App\Constants\Role;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CanDeleteIpAddress
 {
@@ -18,7 +19,9 @@ class CanDeleteIpAddress
         if (
             $request->headers->get('at-role') != Role::ADMIN
         ) {
-            return response('Forbidden', 403);
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], ResponseAlias::HTTP_FORBIDDEN);
         }
 
         return $next($request);

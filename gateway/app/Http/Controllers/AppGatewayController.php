@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseFormatter;
 use App\Services\Gateways\GatewayServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class AppGatewayController extends Controller
 {
@@ -56,10 +57,31 @@ class AppGatewayController extends Controller
         );
     }
 
-    public function auditLogViewByUser(int $changes_made_within = 1): JsonResponse
+    public function auditLogIndex(): JsonResponse
     {
         return ResponseFormatter::format(
-            $this->gatewayService->forwardRequest('GET', 'app/audit_log/view-by-user/' . $changes_made_within)
+            $this->gatewayService->forwardRequest('GET', 'app/audit_log')
+        );
+    }
+
+    public function auditLogViewByLoggedInUser(int $changes_within): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('GET', 'app/audit_log/view-by-user/' . $changes_within)
+        );
+    }
+
+    public function auditLogViewByUser(int $user_id, int $changes_within): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('GET', 'app/audit_log/view-by-user/' . $user_id . '/' . $changes_within)
+        );
+    }
+
+    public function auditLogViewByIp(int $ip_address, int $changes_within): JsonResponse
+    {
+        return ResponseFormatter::format(
+            $this->gatewayService->forwardRequest('GET', 'app/audit_log/view-by-ip/' . $ip_address . '/' . $changes_within)
         );
     }
 }

@@ -20,11 +20,11 @@ class IpRepository
 
     public function get(string $id): ?Ip
     {
-        return $this->ip->where('id', $id)->first();
+        return $this->ip->newModelQuery()->where('id', $id)->first();
     }
 
     public function getByIpAddress(string $ipAddress): ?Ip
     {
-        return $this->ip->where('ip_address', $ipAddress)->first();
+        return $this->ip->newModelQuery()->where('ip_address', $ipAddress)->first();
     }
 }
