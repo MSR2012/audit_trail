@@ -104,6 +104,6 @@ class AuditLogController extends Controller
 
     private function isAdmin(?int $role): bool
     {
-        return $role != Role::ADMIN;
+        return $role == Role::ADMIN;
     }
 }

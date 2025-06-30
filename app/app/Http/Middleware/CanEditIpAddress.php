@@ -28,7 +28,7 @@ class CanEditIpAddress
             $request->headers->get('at-role') != Role::ADMIN &&
             (
                 !$ip ||
-                $ip->user_id !== $request->headers->get('at-user_id')
+                $ip->user_id != $request->headers->get('at-user-id')
             )
         ) {
             return response()->json([
