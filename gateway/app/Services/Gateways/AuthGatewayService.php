@@ -11,18 +11,13 @@ class AuthGatewayService implements GatewayServiceInterface
     private string $baseUrl;
     private string $origin;
 
-    public function __construct(
-        private readonly Request $request
-    )
+    public function __construct(private readonly Request $request)
     {
         $this->baseUrl = rtrim(env('AT_AUTHENTICATION_BASE_URL'), '/');
         $this->origin = rtrim(env('AT_GATEWAY_BASE_URL'), '/');
     }
 
-    public function forwardRequest(
-        string $method,
-        string $url,
-    ): GatewayResponseDto
+    public function forwardRequest(string $method, string $url): GatewayResponseDto
     {
         return ForwardRequestHelper::handle(
             $method,

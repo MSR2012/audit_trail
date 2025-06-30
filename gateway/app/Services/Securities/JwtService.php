@@ -64,11 +64,7 @@ class JwtService implements DecoderInterface
         return false;
     }
 
-    private function validateSignature(
-        string $headerBase64Url,
-        string $payloadBase64Url,
-        string $signature
-    ): bool
+    private function validateSignature(string $headerBase64Url, string $payloadBase64Url, string $signature): bool
     {
         $expectedSignature = $this->generateSignature($headerBase64Url, $payloadBase64Url);
 

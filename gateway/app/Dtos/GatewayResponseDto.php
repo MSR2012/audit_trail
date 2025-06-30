@@ -6,11 +6,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class GatewayResponseDto
 {
-    private function __construct(
-        public int   $code,
-        public array $body,
-        public array $headers
-    )
+    private function __construct(public int $code, public array $body, public array $headers)
     {
     }
 
@@ -31,10 +27,6 @@ class GatewayResponseDto
             );
         }
 
-        return new self(
-            $data['code'],
-            $data['body'],
-            $data['headers']
-        );
+        return new self($data['code'], $data['body'], $data['headers']);
     }
 }

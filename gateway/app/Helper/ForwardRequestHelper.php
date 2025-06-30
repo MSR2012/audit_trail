@@ -11,11 +11,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ForwardRequestHelper
 {
-    public static function handle(
-        string $method,
-        string $url,
-        array  $payload = [],
-    ): GatewayResponseDto
+    public static function handle(string $method, string $url, array $payload = []): GatewayResponseDto
     {
         try {
             $client = new Client();
