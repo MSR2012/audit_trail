@@ -23,6 +23,7 @@ class AuditLogService implements AuditLogServiceInterface
         return $auditLogs->map(function (AuditLog $auditLog) {
             return [
                 'user_id' => $auditLog->user_id,
+                'user_name' => $auditLog->user_name,
                 'ip_address' => $auditLog->ip_address,
                 'action' => $auditLog->action,
                 'changes' => $auditLog->changes,

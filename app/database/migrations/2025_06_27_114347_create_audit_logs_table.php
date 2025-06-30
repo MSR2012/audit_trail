@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('audit_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->string('user_name');
             $table->string('jti');
             $table->string('ip_address');
             $table->string('action');

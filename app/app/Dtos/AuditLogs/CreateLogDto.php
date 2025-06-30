@@ -6,6 +6,7 @@ class CreateLogDto
 {
     private function __construct(
         public int    $userId,
+        public string $userName,
         public string $jti,
         public string $ipAddress,
         public string $action,
@@ -20,6 +21,7 @@ class CreateLogDto
     {
         return new self(
             $data['user_id'],
+            $data['user_name'],
             $data['jti'],
             $data['ip_address'],
             $data['action'],

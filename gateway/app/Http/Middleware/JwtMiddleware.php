@@ -45,6 +45,7 @@ class JwtMiddleware
         }
 
         $request->headers->set('AT-USER-ID', $tokenPayload['user_id']);
+        $request->headers->set('AT-USER-NAME', $tokenPayload['name'] ?? '');
         $request->headers->set('AT-ROLE', $tokenPayload['role']);
         $request->headers->set('AT-JTI', $tokenPayload['jti']);
 

@@ -11,6 +11,7 @@ class CreateLog
     {
         $auditLog = new AuditLog();
         $auditLog->user_id = $createLogDto->userId;
+        $auditLog->user_name = $createLogDto->userName;
         $auditLog->jti = $createLogDto->jti;
         $auditLog->ip_address = $createLogDto->ipAddress;
         $auditLog->action = $createLogDto->action;

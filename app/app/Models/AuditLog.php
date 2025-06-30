@@ -7,11 +7,12 @@ use MongoDB\Laravel\Eloquent\Builder;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @property string|null $id
- * @property string|null $user_id
+ * @property int|null $id
+ * @property int|null $user_id
+ * @property string|null $user_name
  * @property string|null $jti
  * @property string|null $ip_address
- * @property string|null $action
+ * @property int|null $action
  * @property string|null $changes
  * @property string|null $ip
  * @property string|null $user_agent
@@ -30,7 +31,7 @@ class AuditLog extends Model
      * @var string[]
      */
     protected $fillable = [
-        'user_id', 'jti', 'ip_address', 'action', 'changes', 'ip', 'user_agent',
+        'user_id', 'user_name', 'jti', 'ip_address', 'action', 'changes', 'ip', 'user_agent',
     ];
 
     public function scopeUserId(Builder $query, ?int $userId): Builder

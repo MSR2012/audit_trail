@@ -25,6 +25,7 @@ class IpObserver
         $this->createLog->execute(
             CreateLogDto::createFromArray([
                 'user_id' => $this->request->header('at-user-id'),
+                'user_name' => $this->request->header('at-user-name'),
                 'jti' => $this->request->header('at-jti'),
                 'ip_address' => $ip->ip_address,
                 'action' => AuditLogAction::CREATE,
@@ -58,6 +59,7 @@ class IpObserver
         $this->createLog->execute(
             CreateLogDto::createFromArray([
                 'user_id' => $this->request->header('at-user-id'),
+                'user_name' => $this->request->header('at-user-name'),
                 'jti' => $this->request->header('at-jti'),
                 'ip_address' => $ip->ip_address,
                 'action' => AuditLogAction::UPDATE,
@@ -76,6 +78,7 @@ class IpObserver
         $this->createLog->execute(
             CreateLogDto::createFromArray([
                 'user_id' => $this->request->header('at-user-id'),
+                'user_name' => $this->request->header('at-user-name'),
                 'jti' => $this->request->header('at-jti'),
                 'ip_address' => $ip->ip_address,
                 'action' => AuditLogAction::DELETE,

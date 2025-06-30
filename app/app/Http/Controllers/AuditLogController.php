@@ -25,8 +25,10 @@ class AuditLogController extends Controller
         return response()->json(
             $this->auditLogService->index(
                 $this->isAdmin($request->headers->get('at-role')) ?
-                    null :
-                    $request->headers->get('at-user-id')
+                    $request->get('user_id') :
+                    $request->headers->get('at-user-id'),
+                $request->get('ip_address'),
+                $request->get('changes_within')
             ), ResponseAlias::HTTP_OK);
     }
 
@@ -88,6 +90,7 @@ class AuditLogController extends Controller
     {
         $this->auditLogService->create([
             'user_id' => $request->header('at-user-id'),
+            'user_name' => $request->header('at-user-name'),
             'jti' => $request->header('at-jti'),
             'ip_address' => $request->get('ip_address', ''),
             'action' => $request->get('action'),

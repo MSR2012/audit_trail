@@ -19,13 +19,16 @@ class CheckAllowedDomains
             env('AT_GATEWAY_BASE_URL'),
         ];
 
-        $origin = $request->headers->get('Origin');
-        if (!$origin || !in_array($origin, $allowedDomains)) {
-            return response()->json([
-                'message' => 'Unauthorized',
-            ], ResponseAlias::HTTP_FORBIDDEN);
+        $origins = explode(',', $request->headers->get('Origin'));
+        foreach ($origins as $origin) {
+            $origin = trim($origin);
+            if ($origin && in_array($origin, $allowedDomains)) {
+                return $next($request);
+            }
         }
 
-        return $next($request);
+        return response()->json([
+            'message' => 'Unauthorized',
+        ], ResponseAlias::HTTP_FORBIDDEN);
     }
 }

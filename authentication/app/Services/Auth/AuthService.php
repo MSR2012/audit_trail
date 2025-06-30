@@ -53,11 +53,13 @@ class AuthService implements AuthServiceInterface
         $uuid = Str::uuid()->toString();
         $tokenPayload = $this->encoderService->encode([
             'user_id' => $user->id,
+            'name' => $user->name,
             'role' => $user->role,
             'jti' => $uuid,
         ]);
         $refreshTokenPayload = $this->encoderService->encode([
             'user_id' => $user->id,
+            'name' => $user->name,
             'role' => $user->role,
             'jti' => $uuid,
         ], 'refresh');
@@ -114,6 +116,7 @@ class AuthService implements AuthServiceInterface
         $user = $this->userRepository->getByUserId($session->user_id);
         $tokenPayload = $this->encoderService->encode([
             'user_id' => $user->id,
+            'name' => $user->name,
             'role' => $user->role,
             'jti' => $session->uuid,
         ]);

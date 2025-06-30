@@ -21,7 +21,7 @@ class AuthController extends Controller
     /**
      */
     public function __construct(
-        private readonly AuthServiceInterface $authService,
+        private readonly AuthServiceInterface     $authService,
         private readonly ThrottleServiceInterface $throttleService
     )
     {
@@ -51,6 +51,7 @@ class AuthController extends Controller
             dispatch(new AuditLogTrigger(
                 array_merge($request->headers->all(), [
                     'AT-USER-ID' => (int)$user->id,
+                    'AT-USER-NAME' => $user->name,
                     'AT-ROLE' => (int)$user->role,
                     'AT-JTI' => $responseBody['jti'],
                 ]),
@@ -72,7 +73,7 @@ class AuthController extends Controller
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         } catch (ValidationException $e) {
             return response()->json([
-                'errors' => $e->errors(),
+                'error_message' => $this->getMessageFromErrors($e->errors()),
             ], ResponseAlias::HTTP_BAD_REQUEST);
         }
     }

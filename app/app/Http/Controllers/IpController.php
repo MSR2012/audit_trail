@@ -51,7 +51,7 @@ class IpController extends Controller
                 ), ResponseAlias::HTTP_OK);
         } catch (ValidationException $e) {
             return response()->json([
-                'errors' => $e->errors(),
+                'error_message' => $this->getMessageFromErrors($e->errors()),
             ], ResponseAlias::HTTP_BAD_REQUEST);
         } catch (DuplicateRecordException $e) {
             return response()->json([
@@ -93,7 +93,7 @@ class IpController extends Controller
             );
         } catch (ValidationException $e) {
             return response()->json([
-                'errors' => $e->errors(),
+                'error_message' => $this->getMessageFromErrors($e->errors()),
             ], ResponseAlias::HTTP_BAD_REQUEST);
         } catch (RecordsNotFoundException $e) {
             return response()->json([

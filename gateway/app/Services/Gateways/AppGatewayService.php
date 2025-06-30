@@ -24,12 +24,22 @@ class AppGatewayService implements GatewayServiceInterface
         string $url,
     ): GatewayResponseDto
     {
+        $queryString = $this->request->getQueryString();
+        $query = [];
+        foreach (explode('&', $queryString) as $param) {
+            $params = explode('=', $param);
+            if (count($params) == 2) {
+                $query[$params[0]] = $params[1];
+            }
+        }
+
         return ForwardRequestHelper::handle(
             $method,
             $this->baseUrl . './' . ltrim($url, '/'),
             [
                 'headers' => array_merge(['Origin' => $this->origin], $this->request->headers->all()),
                 'body' => $this->request->getContent(),
+                'query' => $query
             ]
         );
     }

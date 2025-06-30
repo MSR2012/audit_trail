@@ -32,5 +32,13 @@ class UserTableSeeder extends Seeder
             'password' => Hash::make('user@123456'),
             'role' => self::ROLE_USER,
         ]);
+
+        DB::table('users')->insert([
+            'name' => 'User2',
+            'email' => 'user2@user.com',
+            'email_verified_at' => Carbon::now(),
+            'password' => Hash::make('user2@123456'),
+            'role' => self::ROLE_USER,
+        ]);
     }
 }
