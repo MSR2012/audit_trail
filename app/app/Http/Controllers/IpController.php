@@ -66,7 +66,7 @@ class IpController extends Controller
             return response()->json($this->ipService->get($id));
         } catch (RecordsNotFoundException $e) {
             return response()->json([
-                'message' => $e->getMessage(),
+                'error_message' => $e->getMessage(),
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
     }
@@ -97,7 +97,7 @@ class IpController extends Controller
             ], ResponseAlias::HTTP_BAD_REQUEST);
         } catch (RecordsNotFoundException $e) {
             return response()->json([
-                'message' => $e->getMessage(),
+                'error_message' => $e->getMessage(),
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
     }
@@ -110,7 +110,7 @@ class IpController extends Controller
             return response()->json(['message' => "Ip deleted successfully."], ResponseAlias::HTTP_OK);
         } catch (RecordsNotFoundException $e) {
             return response()->json([
-                'message' => $e->getMessage(),
+                'error_message' => $e->getMessage(),
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
     }

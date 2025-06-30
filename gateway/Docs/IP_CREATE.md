@@ -73,15 +73,7 @@ Occurs when request body parameters fail validation rules.
 
 ```json
 {
-    "errors": {
-        "ip_address": [
-            "The ip address field is required.",
-            "The ip address must be a valid IP address."
-        ],
-        "label": [
-            "The label field is required."
-        ]
-    }
+    "error_message": "The ip address field is required., The ip address must be a valid IP address., The label field is required."
 }
 ```
 

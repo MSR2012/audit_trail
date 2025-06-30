@@ -78,13 +78,6 @@ attacks.
 
 ```json
 {
-    "errors": {
-        "email": [
-            "The email field is required."
-        ],
-        "password": [
-            "The password field is required."
-        ]
-    }
+    "error_message": "The email field is required., The password field is required."
 }
 ```

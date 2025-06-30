@@ -56,6 +56,6 @@ Occurs when no IP address with the specified ID is found for deletion.
 
 ```json
 {
-    "message": "Ip not found."
+    "error_message": "Ip not found."
 }
 ```

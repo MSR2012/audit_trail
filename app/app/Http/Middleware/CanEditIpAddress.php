@@ -23,12 +23,16 @@ class CanEditIpAddress
      */
     public function handle(Request $request, Closure $next): mixed
     {
+        $ip = $this->ipRepository->get($request->route('id'));
         if (
             $request->headers->get('at-role') != Role::ADMIN &&
-            !$this->ipRepository->get($request->route('id'))
+            (
+                !$ip ||
+                $ip->user_id !== $request->headers->get('at-user_id')
+            )
         ) {
             return response()->json([
-                'message' => 'Unauthorized',
+                'error_message' => 'Unauthorized',
             ], ResponseAlias::HTTP_FORBIDDEN);
         }
 

@@ -29,7 +29,7 @@ class CheckAllowedDomains
         }
 
         return response()->json([
-            'message' => 'Unauthorized',
+            'error_message' => 'Unauthorized',
         ], ResponseAlias::HTTP_FORBIDDEN);
     }
 }

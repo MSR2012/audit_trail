@@ -21,7 +21,7 @@ class CheckAuthenticatedRequest
             !$request->headers->has('at-jti')
         ) {
             return response()->json([
-                'message' => 'Unauthorized',
+                'error_message' => 'Unauthorized',
             ], ResponseAlias::HTTP_FORBIDDEN);
         }
 

@@ -77,11 +77,7 @@ Occurs when request body parameters fail validation rules.
 
 ```json
 {
-    "errors": {
-        "label": [
-            "The label field is required."
-        ]
-    }
+    "error_message": "The label field is required."
 }
 ```
 
@@ -91,6 +87,6 @@ Occurs when no IP address with the specified ID is found for update.
 
 ```json
 {
-    "message": "Ip not found."
+    "error_message": "Ip not found."
 }
 ```
